@@ -126,7 +126,94 @@ public class Driver {
     }
 
     public void classMenu(Class curClass){
-
+        boolean inMenu = true;
+        while(inMenu){
+            System.out.println("Actions for " + curClass + ": ");
+            System.out.println("View summary (1)");
+            System.out.println("Edit Student (2)");
+            System.out.println("Add Student (3)");
+            System.out.println("Remove Student (4)");
+            System.out.println("Add Category (5)");
+            System.out.println("Remove Category (6)");
+            System.out.println("Exit (7)");
+            switch(getInt("Please enter the option you wish to take: ", 1, 7)){
+                case 1:
+                    System.out.println("Class Average: " + curClass.classAverage());
+                    System.out.println("Class Median: " + curClass.classMedian());
+                    System.out.println();
+                    System.out.println("Category Averages: ");
+                    for(Category i : curClass.getCategories()){
+                        System.out.println(i + ": Average = " + curClass.categoryAverage(i) + "\tMedian = " + curClass.categoryMedian(i));
+                    }
+                    break;
+                case 2:
+                    ArrayList<Student> students = curClass.getStudents();
+                    for(int i = 0; i < students.size(); i++){
+                        System.out.println("[" + i + "] " + students.get(i));
+                    }
+                    int ind = getInt("Please enter the index of the student you want to edit (or -1 to not edit) ", -1, students.size() - 1);
+                    if(ind >= 0){
+                        studentMenu(students.get(ind), curClass.getCategories());
+                    }
+                    break;
+                case 3:
+                    String firstName = getLine("Please enter the first name of the student: ");
+                    String lastName = getLine("Please enter the last name of the student: ");
+                    int number = -1;
+                    while(number < 0){
+                        number = getInt("Please enter the student number: ", 100000000, 999999999);
+                        if(curClass.hasStudent(number)){
+                            System.out.println("A student with that number already exists. ");
+                            number = -1;
+                        }
+                    }
+                    if(getYes("Are you sure you want to add the student (Y/N)? ")){
+                        curClass.addStudent(new Student(firstName, lastName, number));
+                    }
+                    break;
+                case 4:
+                    students = curClass.getStudents();
+                    for(int i = 0; i < students.size(); i++){
+                        System.out.println("[" + i + "] " + students.get(i));
+                    }
+                    ind = getInt("Please enter the index of the student you wish to remove (or -1 to not remove) ", -1, students.size() - 1);
+                    if(getYes("Are you sure you want to remove " + students.get(ind))){
+                        curClass.removeStudent(ind);
+                    }
+                    break;
+                case 5:
+                    String catName = "";
+                    while(catName.trim().equals("")){
+                        catName = getLine("Please enter the name of the category you wish to add: ");
+                        if(curClass.hasCategory(catName)){
+                            System.out.println("That category already exists. ");
+                            catName = "";
+                        }
+                    }
+                    int weight = getInt("Please enter the weight of this category: ", 1, 100000000);
+                    if(getYes("Are you sure you want to add category '" + catName + "' (Y/N)? ")){
+                        curClass.addCategory(new Category(catName, weight));
+                        System.out.println("Category added");
+                    }
+                    break;
+                case 6:
+                    ArrayList<Category> categories = curClass.getCategories();
+                    for(int i = 0; i < categories.size(); i++){
+                        System.out.println("[" + i + "] " + categories.get(i));
+                    }
+                    ind = getInt("Please enter the index of the category to remove (or -1 to not remove any): ", -1, categories.size() - 1);
+                    if(ind >= 0 && getYes("Are you sure you want to remove the category (Y/N)? ")){
+                        curClass.removeCategory(ind);
+                        System.out.println("Category removed.");
+                    }
+                    break;
+                case 7:
+                    inMenu = false;
+                    break;
+                default:
+                    System.out.println("Something went wrong...");
+            }
+        }
     }
 
     public void testStudent() {

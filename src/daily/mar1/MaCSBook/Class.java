@@ -6,10 +6,19 @@ public class Class {
 
     private final ArrayList<Student> students;
     private final ArrayList<Category> categories;
+    private final String name;
 
-    public Class(){
+    public Class(String name){
+        this.name = name;
         students = new ArrayList<Student>();
         categories = new ArrayList<Category>();
+    }
+
+    /**
+     * @return the name of the class
+     */
+    public String getName(){
+        return name;
     }
 
     /**
@@ -18,6 +27,46 @@ public class Class {
      */
     public void addStudent(Student toAdd){
         students.add(toAdd);
+    }
+
+    /**
+     * checks for if a student number already exists
+     * @param studentNumber the student number to check for
+     * @return whether or not a student with that number exists
+     */
+    public boolean hasStudent(int studentNumber){
+        for(Student i : students){
+            if(i.getNumber() == studentNumber) return true;
+        }
+        return false;
+    }
+
+    /**
+     * removes a student
+     * @param index the index of the student to remove from this class
+     */
+    public void removeStudent(int index){
+        students.remove(index);
+    }
+
+    /**
+     * checks if a category exists
+     * @param name the name of the category
+     * @return whether a category with name [name] exists
+     */
+    public boolean hasCategory(String name){
+        for(Category i : categories){
+            if(i.getName().trim().equals(name.trim())) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Removes a category
+     * @param index the index of the category
+     */
+    public void removeCategory(int index){
+        categories.remove(index);
     }
 
     /**
@@ -52,6 +101,35 @@ public class Class {
             ret.add(new Mark(i.weightedAverage(categories), 1, i.toString(), i.toString()));
         }
         return ret;
+    }
+
+    /**
+     * Returns the students' marks for a particular category
+     * @param category the category to filter out
+     * @return a list of marks for a particular category
+     */
+    public ArrayList<Mark> asMarks(Category category){
+        ArrayList<Mark> catMarks = new ArrayList<Mark>();
+        for(Student i : students){
+            catMarks.add(new Mark(i.categoryMean(category), 1, i.toString(), category.getName()));
+        }
+        return catMarks;
+    }
+
+    /**
+     * @param name the category to check for
+     * @return the class average for a particular category
+     */
+    public double categoryAverage(Category name){
+        return Mark.calcAverage(asMarks(name));
+    }
+
+    /**
+     * @param name the category to check for
+     * @return the class median for a particular category
+     */
+    public double categoryMedian(Category name){
+        return Mark.getMedian(asMarks(name));
     }
 
     /**

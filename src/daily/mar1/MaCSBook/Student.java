@@ -127,6 +127,10 @@ public class Student {
         return Mark.calcAverage(categoryMedian(categories));
     }
 
+    public int getNumber() {
+        return number;
+    }
+
     public String toString(){
         return firstName + " " + lastName + " (" + number + ")";
     }
