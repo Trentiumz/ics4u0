@@ -6,7 +6,7 @@ public class Student {
 
     private final String firstName, lastName;
     private final int number;
-    private final ArrayList<StudentMark> marks;
+    private ArrayList<StudentMark> marks;
 
     public Student(String firstName, String lastName, int studentNumber){
         this.firstName = firstName;
@@ -115,6 +115,18 @@ public class Student {
      */
     public double weightedAverage(ArrayList<Category> categories){
         return Mark.calcAverage(categoryMean(categories));
+    }
+
+    /**
+     * Removes all marks with a specific category name
+     * @param categoryName the name of the category to remove
+     */
+    public void removeCategory(String categoryName){
+        ArrayList<StudentMark> without = new ArrayList<StudentMark>();
+        for(StudentMark i : marks){
+            if(!i.getCategory().equals(categoryName)) without.add(i);
+        }
+        marks = without;
     }
 
     /**

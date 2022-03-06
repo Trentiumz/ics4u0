@@ -66,6 +66,9 @@ public class Class {
      * @param index the index of the category
      */
     public void removeCategory(int index){
+        for(Student i : students){
+            i.removeCategory(categories.get(index).getName());
+        }
         categories.remove(index);
     }
 

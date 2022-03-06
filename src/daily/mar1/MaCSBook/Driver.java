@@ -135,8 +135,9 @@ public class Driver {
             System.out.println("Remove Student (4)");
             System.out.println("Add Category (5)");
             System.out.println("Remove Category (6)");
-            System.out.println("Exit (7)");
-            switch(getInt("Please enter the option you wish to take: ", 1, 7)){
+            System.out.println("Edit Category Weight (7)");
+            System.out.println("Exit (8)");
+            switch(getInt("Please enter the option you wish to take: ", 1, 8)){
                 case 1:
                     System.out.println("Class Average: " + curClass.classAverage());
                     System.out.println("Class Median: " + curClass.classMedian());
@@ -208,6 +209,18 @@ public class Driver {
                     }
                     break;
                 case 7:
+                    categories = curClass.getCategories();
+                    for(int i = 0; i < categories.size(); i++){
+                        System.out.println("[" + i + "] " + categories.get(i));
+                    }
+                    ind = getInt("Please enter the index of the category to edit (or -1 to not edit any): ", -1, categories.size() - 1);
+                    if (ind >= 0) {
+                        int to = getInt("Please enter the new weight of the category: ", 1, 100000000);
+                        categories.get(ind).setWeight(to);
+                        System.out.println("Category updated");
+                    }
+                    break;
+                case 8:
                     inMenu = false;
                     break;
                 default:
