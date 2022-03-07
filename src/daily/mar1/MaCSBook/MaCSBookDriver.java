@@ -1,13 +1,29 @@
+/*
+* Programmer: Daniel Ye
+* Teacher: Ms. Krasteva
+* Date: March 7, 2022
+* Description: The main class for the MaCSBook Program. This includes the menu and load/save features
+ */
+
 package daily.mar1.MaCSBook;
 
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
-public class Driver {
+public class MaCSBookDriver {
 
+    /**
+     * The main scanner for taking io
+     */
     Scanner sc = new Scanner(System.in);
 
+    /**
+     * Gets and integer from standard input
+     * @param prompt the prompt to ask the user
+     * @return the integer the user entered
+     */
     public int getInt(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -19,6 +35,22 @@ public class Driver {
         }
     }
 
+    /**
+     * Returns the percentage representation of a decimal
+     * @param dec the decimal value
+     * @return the percentage equivalent of the decimal
+     */
+    public static String toPercentage(double dec){
+        return new DecimalFormat("#0.##").format(dec * 100);
+    }
+
+    /**
+     * Gets and integer from standard input but restricts the input between lo and hi
+     * @param prompt the prompt to ask the user
+     * @param lo the lower bound for the user
+     * @param hi the upper bound for the input
+     * @return the integer the user entered, guaranteed to be between lo and hi
+     */
     public int getInt(String prompt, int lo, int hi) {
         while (true) {
             int inp = getInt(prompt);
@@ -26,11 +58,21 @@ public class Driver {
         }
     }
 
+    /**
+     * Gets a line from standard input
+     * @param prompt the prompt to ask the user
+     * @return the line the user entered
+     */
     public String getLine(String prompt) {
         System.out.print(prompt);
         return sc.nextLine();
     }
 
+    /**
+     * Gets a boolean from standard input
+     * @param prompt the prompt to ask the user
+     * @return whether the user returned a positive or negative response
+     */
     public boolean getYes(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -40,6 +82,12 @@ public class Driver {
         }
     }
 
+    /**
+     * Returns the user choice from a list of options
+     * @param prompt the barebones prompt (without the options the user can choose)
+     * @param options the list of options
+     * @return the option the user chose
+     */
     public String getOption(String prompt, ArrayList<String> options) {
         String line = "";
         while (!options.contains(line)) {
@@ -49,6 +97,11 @@ public class Driver {
         return line;
     }
 
+    /**
+     * The menu for a student
+     * @param edit the student to edit
+     * @param categories the categories that are valid for the student
+     */
     public void studentMenu(Student edit, ArrayList<Category> categories) {
         String ins = "";
         ArrayList<String> options = new ArrayList<String>();
@@ -73,15 +126,15 @@ public class Driver {
                     break;
                 case "2":
                     System.out.println(edit);
-                    System.out.println("Average: " + edit.calcAverage());
-                    System.out.println("Median: " + edit.getMedian());
-                    System.out.println("Weighted Average: " + edit.weightedAverage(categories));
-                    System.out.println("Blended Median: " + edit.weightedMedian(categories));
+                    System.out.println("Average: " + toPercentage(edit.calcAverage()));
+                    System.out.println("Median: " + toPercentage(edit.getMedian()));
+                    System.out.println("Weighted Average: " + toPercentage(edit.weightedAverage(categories)));
+                    System.out.println("Blended Median: " + toPercentage(edit.weightedMedian(categories)));
                     System.out.println();
                     System.out.println("Categorical Information: ");
                     for (Category i : categories) {
-                        System.out.println(i + " mark: " + edit.categoryMean(i));
-                        System.out.println(i + " median mark: " + edit.categoryMedian(i));
+                        System.out.println(i + " mark: " + toPercentage(edit.categoryMean(i)));
+                        System.out.println(i + " median mark: " + toPercentage(edit.categoryMedian(i)));
                     }
 
                     System.out.println();
@@ -125,6 +178,10 @@ public class Driver {
         }
     }
 
+    /**
+     * The menu for a class
+     * @param curClass the class the menu is for
+     */
     public void classMenu(Class curClass){
         boolean inMenu = true;
         while(inMenu){
@@ -146,6 +203,7 @@ public class Driver {
                     for(Category i : curClass.getCategories()){
                         System.out.println(i + ": Average = " + curClass.categoryAverage(i) + "\tMedian = " + curClass.categoryMedian(i));
                     }
+                    System.out.println();
                     break;
                 case 2:
                     ArrayList<Student> students = curClass.getStudents();
@@ -229,12 +287,17 @@ public class Driver {
         }
     }
 
-    public void testStudent() {
-        Student tom = new Student("Tom", "Job", 335123123);
-        studentMenu(tom, new ArrayList<Category>(Arrays.asList(new Category("Knowledge", 10), new Category("Understanding", 20))));
-    }
-
+    /**
+     * The main method for the class
+     * @param args arguments for the program (ignored)
+     */
     public static void main(String[] args) {
-        new Driver().testStudent();
+        try{
+            Class cur = Parser.parseClass("class.txt");
+            new MaCSBookDriver().classMenu(cur);
+            Parser.writeClass(cur, "class.txt");
+        } catch(IOException e){
+            System.out.println("Something went wrong...");
+        }
     }
 }

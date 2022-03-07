@@ -1,11 +1,26 @@
+/*
+ * Programmer: Daniel Ye
+ * Teacher: Ms. Krasteva
+ * Date: March 7, 2022
+ * Description: The data structure for a class, including categories and students
+ */
+
 package daily.mar1.MaCSBook;
 
 import java.util.*;
 
 public class Class {
-
+    /**
+     * The list of students
+     */
     private final ArrayList<Student> students;
+    /**
+     * The list of categories
+     */
     private final ArrayList<Category> categories;
+    /**
+     * The name of the class
+     */
     private final String name;
 
     public Class(String name){
@@ -149,4 +164,7 @@ public class Class {
         return Mark.getMedian(asMarks());
     }
 
+    public String toString(){
+        return name;
+    }
 }

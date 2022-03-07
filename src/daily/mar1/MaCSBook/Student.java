@@ -1,11 +1,27 @@
+/*
+ * Programmer: Daniel Ye
+ * Teacher: Ms. Krasteva
+ * Date: March 7, 2022
+ * Description: The behavior and attributes for a particular student
+ */
+
 package daily.mar1.MaCSBook;
 
 import java.util.*;
 
 public class Student {
 
+    /**
+     * the name of the student
+     */
     private final String firstName, lastName;
+    /**
+     * The student number
+     */
     private final int number;
+    /**
+     * A list of marks for the student
+     */
     private ArrayList<StudentMark> marks;
 
     public Student(String firstName, String lastName, int studentNumber){
@@ -13,6 +29,7 @@ public class Student {
         this.lastName = lastName;
         this.number = studentNumber;
         marks = new ArrayList<StudentMark>();
+
     }
 
     /**
@@ -141,6 +158,14 @@ public class Student {
 
     public int getNumber() {
         return number;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public String toString(){

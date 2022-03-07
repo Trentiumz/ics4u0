@@ -1,12 +1,32 @@
+/*
+ * Programmer: Daniel Ye
+ * Teacher: Ms. Krasteva
+ * Date: March 7, 2022
+ * Description: The data structure for any particular mark. Also contains algorithms for the mode and median
+ */
+
 package daily.mar1.MaCSBook;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Mark {
+    /**
+     * The score "as a decimal" of the mark
+     */
     private double score;
+    /**
+     * The weight/importance of the mark
+     */
     private int importance;
-    private final String name, category;
+    /**
+     * The name of the mark/assignment
+     */
+    private final String name;
+    /**
+     * The category the mark is a part of
+     */
+    private final String category;
 
     public Mark(double score, int importance, String name, String category){
         this.score = score;
