@@ -28,6 +28,13 @@ public class Mark {
      */
     private final String category;
 
+    /**
+     * Class constructor
+     * @param score the score (as a decimal/fraction) that the student got
+     * @param importance the weight of the mark
+     * @param name the name of the mark
+     * @param category the category the mark is a part of
+     */
     public Mark(double score, int importance, String name, String category){
         this.score = score;
         this.importance = importance;
@@ -35,14 +42,25 @@ public class Mark {
         this.category = category;
     }
 
+    /**
+     * @return the name of the mark
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * sets the score of the mark
+     * @param score the score to set it to
+     */
     public void setScore(double score) {
         this.score = score;
     }
 
+    /**
+     * sets the weight of the mark
+     * @param importance the importance/weight of the mark
+     */
     public void setImportance(int importance) {
         this.importance = importance;
     }
@@ -81,6 +99,7 @@ public class Mark {
      */
     private static ArrayList<Mark> sortMarks(ArrayList<Mark> marks) {
         ArrayList<Mark> ret = new ArrayList<Mark>(marks);
+        // run bubble search on the Marks, sorting by the mark score/percentage
         for (int iter = 0; iter < ret.size(); iter++) {
             for (int i = 0; i < ret.size() - 1; i++) {
                 if (ret.get(i).getScore() > ret.get(i + 1).getScore()) {
@@ -99,6 +118,7 @@ public class Mark {
      * @return the total weight
      */
     private static int totWeight(ArrayList<Mark> marks){
+        // sum of weights of a list of marks
         int tot = 0;
         for(Mark i : marks){
             tot += i.getWeight();
@@ -113,6 +133,7 @@ public class Mark {
      */
     public static double calcAverage(ArrayList<Mark> marks){
         if(marks.isEmpty()) return 0.0;
+        // total number of points divided by the total weight of the marks
         double points = 0;
         for(Mark i : marks){
             points += i.getPoints();
@@ -130,6 +151,7 @@ public class Mark {
         marks = sortMarks(marks);
         // total weight, half of the weight, weights before (for use in loop)
         int tot = totWeight(marks);
+        // half is the supposed "index" at which the median should be in
         double half = (double) tot / 2;
         int weightsBefore = 0;
 

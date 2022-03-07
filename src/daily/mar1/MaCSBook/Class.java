@@ -23,6 +23,10 @@ public class Class {
      */
     private final String name;
 
+    /**
+     * class constructor
+     * @param name the name of the class
+     */
     public Class(String name){
         this.name = name;
         students = new ArrayList<Student>();

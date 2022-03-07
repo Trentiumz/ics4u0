@@ -17,18 +17,34 @@ public class Category {
      */
     private int weight;
 
+    /**
+     * Class constructor
+     * @param name name of the category
+     * @param weight weight of the category
+     */
     public Category(String name, int weight){
         this.name = name;
         this.weight = weight;
     }
+
+    /**
+     * @return name of the category
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return weight of the category
+     */
     public int getWeight() {
         return weight;
     }
 
+    /**
+     * sets the weight of the category
+     * @param weight the weight of the category
+     */
     public void setWeight(int weight) {
         this.weight = weight;
     }

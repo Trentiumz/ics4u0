@@ -3,3 +3,4 @@ Categories:
 Knowledge,20;Application,30
 Students:
 Daniel,Ye,382947183;Crazy Sentences,Application,10,40,45;Quiz 1,Knowledge,20,30,35
+Tom,Flop,173849672;Quiz 1,Knowledge,10,20,35;Quiz 2,Application,15,28,30;Quiz 3,Knowledge,20,38,40

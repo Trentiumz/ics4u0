@@ -25,6 +25,7 @@ public class MaCSBookDriver {
      * @return the integer the user entered
      */
     public int getInt(String prompt) {
+        // continually prompt until we get an integer
         while (true) {
             System.out.print(prompt);
             String val = sc.nextLine();
@@ -41,7 +42,7 @@ public class MaCSBookDriver {
      * @return the percentage equivalent of the decimal
      */
     public static String toPercentage(double dec){
-        return new DecimalFormat("#0.##").format(dec * 100);
+        return new DecimalFormat("#0.##").format(dec * 100) + "%";
     }
 
     /**
@@ -52,6 +53,7 @@ public class MaCSBookDriver {
      * @return the integer the user entered, guaranteed to be between lo and hi
      */
     public int getInt(String prompt, int lo, int hi) {
+        // continually prompt until we get a valid integer
         while (true) {
             int inp = getInt(prompt);
             if (lo <= inp && inp <= hi) return inp;
@@ -74,6 +76,7 @@ public class MaCSBookDriver {
      * @return whether the user returned a positive or negative response
      */
     public boolean getYes(String prompt) {
+        // continually prompt until we get 'Y' or 'N'
         while (true) {
             System.out.print(prompt);
             String inp = sc.nextLine();
@@ -90,6 +93,8 @@ public class MaCSBookDriver {
      */
     public String getOption(String prompt, ArrayList<String> options) {
         String line = "";
+        // if no option can be chosen, then we have no choice but to return an empty string
+        if(options.isEmpty()) return line;
         while (!options.contains(line)) {
             System.out.print(prompt + " " + options + ": ");
             line = sc.nextLine();
@@ -103,40 +108,56 @@ public class MaCSBookDriver {
      * @param categories the categories that are valid for the student
      */
     public void studentMenu(Student edit, ArrayList<Category> categories) {
+        // the instruction/action for the menu
         String ins = "";
+        // the list of categories in the class (as a string)
         ArrayList<String> options = new ArrayList<String>();
         for (Category i : categories) options.add(i.getName());
+
+        // while the user does not wish to exit
         while (!ins.equals("4")) {
+            // print out the actions the user can take
             System.out.println("Actions for " + edit + ": ");
             System.out.println("Add Assignment (1)");
             System.out.println("View Summary (2)");
             System.out.println("Edit Assignments (3)");
             System.out.println("Exit (4)");
+
+            // get the instruction
             ins = sc.nextLine();
             switch (ins) {
                 case "1":
+                    // get the user to enter the name, total marks, student mark, weight, and category of this assignment
                     String name = getLine("Please enter the name of the assignment: ");
                     int outOf = getInt("Please enter the total marks: ");
                     int mark = getInt("Please enter the mark: ", 0, outOf);
                     int weight = getInt("Please enter the importance: ");
                     String category = getOption("Please enter the category of the assignment", options);
+
+                    // add the assignment after confirmation
                     if (getYes("Are you sure you want to enter in this assignment (Y/N)?")) {
                         edit.addMark(new StudentMark(mark, outOf, weight, name, category));
                     }
                     break;
                 case "2":
+                    // print out the summary of the student
                     System.out.println(edit);
+
+                    // print average, median, weighted average, and blended median of the student
                     System.out.println("Average: " + toPercentage(edit.calcAverage()));
                     System.out.println("Median: " + toPercentage(edit.getMedian()));
                     System.out.println("Weighted Average: " + toPercentage(edit.weightedAverage(categories)));
                     System.out.println("Blended Median: " + toPercentage(edit.weightedMedian(categories)));
                     System.out.println();
+
+                    // print student performance in each category
                     System.out.println("Categorical Information: ");
                     for (Category i : categories) {
                         System.out.println(i + " mark: " + toPercentage(edit.categoryMean(i)));
                         System.out.println(i + " median mark: " + toPercentage(edit.categoryMedian(i)));
                     }
 
+                    // print the list of student marks
                     System.out.println();
                     System.out.println("List of Marks");
                     for(Mark i : edit.getMarks()){
@@ -145,31 +166,40 @@ public class MaCSBookDriver {
                     System.out.println();
                     break;
                 case "3":
+                    // print the list of student marks
                     ArrayList<StudentMark> studentMarks = edit.getMarks();
                     for (int i = 0; i < studentMarks.size(); i++) {
                         System.out.println("[" + i + "] " + studentMarks.get(i));
                     }
+
+                    // prompt user for the mark to edit
                     int curInd = getInt("Please enter the index of the assignment to change (-1 for none): ", -1, studentMarks.size() - 1);
                     StudentMark toChange = studentMarks.get(curInd);
                     if (curInd >= 0) {
+                        // 5 actions for editing the mark (or 5 to not edit at all)
                         System.out.println("Actions: ");
                         System.out.println("Set Mark (1)");
                         System.out.println("Set Total Marks (2)");
                         System.out.println("Set weight (3)");
                         System.out.println("Remove (4)");
                         System.out.println("Exit (5)");
+                        // prompt user for action
                         int action = getInt("Please enter your desired action: ", 1, 5);
                         if (action == 1) {
+                            // change mark to what the user wishes to change it to
                             mark = getInt("The student mark: ", 0, toChange.getOutOf());
                             toChange.setMark(mark);
                             System.out.println("Mark set");
-                        } else if(action ==2) {
+                        } else if(action == 2) {
+                            // change the total number of marks to what the user wishes to change it to
                             outOf = getInt("The total # of marks: ", 1, 1000000000);
                             toChange.setOutOf(outOf);
                             System.out.println("Mark set");
                         } else if (action == 3) {
+                            // change the weight to the user choice
                             studentMarks.get(curInd).setImportance(getInt("Please enter the weight of the assessment: ", 1, 10000000));
                         } else if (action == 4) {
+                            // remove the current mark
                             edit.removeMark(curInd);
                         }
                     }
@@ -183,8 +213,10 @@ public class MaCSBookDriver {
      * @param curClass the class the menu is for
      */
     public void classMenu(Class curClass){
+        // whether the user wants to stay in the menu
         boolean inMenu = true;
         while(inMenu){
+            // print the actions the user can take
             System.out.println("Actions for " + curClass + ": ");
             System.out.println("View summary (1)");
             System.out.println("Edit Student (2)");
@@ -194,28 +226,37 @@ public class MaCSBookDriver {
             System.out.println("Remove Category (6)");
             System.out.println("Edit Category Weight (7)");
             System.out.println("Exit (8)");
+
+            // switch on user option
             switch(getInt("Please enter the option you wish to take: ", 1, 8)){
                 case 1:
-                    System.out.println("Class Average: " + curClass.classAverage());
-                    System.out.println("Class Median: " + curClass.classMedian());
+                    // print class average and class median
+                    System.out.println("Class Average: " + toPercentage(curClass.classAverage()));
+                    System.out.println("Class Median: " + toPercentage(curClass.classMedian()));
                     System.out.println();
+                    // print average and median for each category
                     System.out.println("Category Averages: ");
                     for(Category i : curClass.getCategories()){
-                        System.out.println(i + ": Average = " + curClass.categoryAverage(i) + "\tMedian = " + curClass.categoryMedian(i));
+                        System.out.println(i + ": Average = " + toPercentage(curClass.categoryAverage(i))  + "\tMedian = " + toPercentage(curClass.categoryMedian(i)));
                     }
                     System.out.println();
                     break;
                 case 2:
+                    // print each student
                     ArrayList<Student> students = curClass.getStudents();
                     for(int i = 0; i < students.size(); i++){
                         System.out.println("[" + i + "] " + students.get(i));
                     }
+
+                    // get the index of the student to edit and go into the student menu
                     int ind = getInt("Please enter the index of the student you want to edit (or -1 to not edit) ", -1, students.size() - 1);
                     if(ind >= 0){
                         studentMenu(students.get(ind), curClass.getCategories());
                     }
                     break;
                 case 3:
+                    // get first name, last name, and student number the teacher wants to add
+                    // make sure the student number is unique
                     String firstName = getLine("Please enter the first name of the student: ");
                     String lastName = getLine("Please enter the last name of the student: ");
                     int number = -1;
@@ -226,21 +267,25 @@ public class MaCSBookDriver {
                             number = -1;
                         }
                     }
+                    // add the student after a confirmation
                     if(getYes("Are you sure you want to add the student (Y/N)? ")){
                         curClass.addStudent(new Student(firstName, lastName, number));
                     }
                     break;
                 case 4:
+                    // print each of the students
                     students = curClass.getStudents();
                     for(int i = 0; i < students.size(); i++){
                         System.out.println("[" + i + "] " + students.get(i));
                     }
+                    // prompt the teacher for the student to remove and remove him/her after confirmation
                     ind = getInt("Please enter the index of the student you wish to remove (or -1 to not remove) ", -1, students.size() - 1);
                     if(getYes("Are you sure you want to remove " + students.get(ind))){
                         curClass.removeStudent(ind);
                     }
                     break;
                 case 5:
+                    // get the name of the category, making sure it is not empty nor exists
                     String catName = "";
                     while(catName.trim().equals("")){
                         catName = getLine("Please enter the name of the category you wish to add: ");
@@ -249,17 +294,24 @@ public class MaCSBookDriver {
                             catName = "";
                         }
                     }
+
+                    // enter the weight of the category
                     int weight = getInt("Please enter the weight of this category: ", 1, 100000000);
+
+                    // add the category after confirmation
                     if(getYes("Are you sure you want to add category '" + catName + "' (Y/N)? ")){
                         curClass.addCategory(new Category(catName, weight));
                         System.out.println("Category added");
                     }
                     break;
                 case 6:
+                    // print out each category
                     ArrayList<Category> categories = curClass.getCategories();
                     for(int i = 0; i < categories.size(); i++){
                         System.out.println("[" + i + "] " + categories.get(i));
                     }
+
+                    // prompt for the category to remove, and remove it after confirmation
                     ind = getInt("Please enter the index of the category to remove (or -1 to not remove any): ", -1, categories.size() - 1);
                     if(ind >= 0 && getYes("Are you sure you want to remove the category (Y/N)? ")){
                         curClass.removeCategory(ind);
@@ -267,18 +319,23 @@ public class MaCSBookDriver {
                     }
                     break;
                 case 7:
+                    // print each category
                     categories = curClass.getCategories();
                     for(int i = 0; i < categories.size(); i++){
                         System.out.println("[" + i + "] " + categories.get(i));
                     }
+
+                    // prompt the user for the category to edit
                     ind = getInt("Please enter the index of the category to edit (or -1 to not edit any): ", -1, categories.size() - 1);
                     if (ind >= 0) {
+                        // edit the category by setting its weight
                         int to = getInt("Please enter the new weight of the category: ", 1, 100000000);
                         categories.get(ind).setWeight(to);
                         System.out.println("Category updated");
                     }
                     break;
                 case 8:
+                    // exit the menu
                     inMenu = false;
                     break;
                 default:
@@ -293,8 +350,11 @@ public class MaCSBookDriver {
      */
     public static void main(String[] args) {
         try{
+            // get the class from the file
             Class cur = Parser.parseClass("class.txt");
+            // run the menu for the class
             new MaCSBookDriver().classMenu(cur);
+            // save the class
             Parser.writeClass(cur, "class.txt");
         } catch(IOException e){
             System.out.println("Something went wrong...");

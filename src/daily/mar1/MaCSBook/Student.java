@@ -24,6 +24,12 @@ public class Student {
      */
     private ArrayList<StudentMark> marks;
 
+    /**
+     * Class constructor
+     * @param firstName the first name of the student
+     * @param lastName the last name of the student
+     * @param studentNumber the student number
+     */
     public Student(String firstName, String lastName, int studentNumber){
         this.firstName = firstName;
         this.lastName = lastName;
@@ -46,6 +52,7 @@ public class Student {
      */
     private ArrayList<Mark> filterCategory(String name){
         ArrayList<Mark> ret = new ArrayList<Mark>();
+        // add each mark of the current category
         for(Mark i : marks){
             if(i.getCategory().equals(name)) ret.add(i);
         }
@@ -76,7 +83,10 @@ public class Student {
     public ArrayList<Mark> categoryMean(ArrayList<Category> categories){
         ArrayList<Mark> catMarks = new ArrayList<Mark>();
         for(Category i : categories){
-            if(!filterCategory(i.getName()).isEmpty()) catMarks.add(new Mark(categoryMean(i), i.getWeight(), i.getName(), i.getName()));
+            // add the mark of the category if it is not empty
+            if(!filterCategory(i.getName()).isEmpty()) {
+                catMarks.add(new Mark(categoryMean(i), i.getWeight(), i.getName(), i.getName()));
+            }
         }
         return catMarks;
     }
@@ -89,7 +99,10 @@ public class Student {
     public ArrayList<Mark> categoryMedian(ArrayList<Category> categories){
         ArrayList<Mark> catMarks = new ArrayList<Mark>();
         for(Category i : categories){
-            if(!filterCategory(i.getName()).isEmpty()) catMarks.add(new Mark(categoryMedian(i), i.getWeight(), i.getName(), i.getName()));
+            // add the mark of the current category if it is not empty
+            if(!filterCategory(i.getName()).isEmpty()) {
+                catMarks.add(new Mark(categoryMedian(i), i.getWeight(), i.getName(), i.getName()));
+            }
         }
         return catMarks;
     }
@@ -140,6 +153,7 @@ public class Student {
      */
     public void removeCategory(String categoryName){
         ArrayList<StudentMark> without = new ArrayList<StudentMark>();
+        // add each mark not with the current category
         for(StudentMark i : marks){
             if(!i.getCategory().equals(categoryName)) without.add(i);
         }
@@ -156,14 +170,23 @@ public class Student {
         return Mark.calcAverage(categoryMedian(categories));
     }
 
+    /**
+     * @return the student number
+     */
     public int getNumber() {
         return number;
     }
 
+    /**
+     * @return first name of the student
+     */
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     * @return last name of the student
+     */
     public String getLastName() {
         return lastName;
     }
